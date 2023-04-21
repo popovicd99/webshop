@@ -9,6 +9,10 @@ class PS extends Model
 {
     use HasFactory;
 
+    public $table = 'ps';
+
+    public $timestamps = false;
+
     public function product()
     {
         return $this->belongsTo(Product::class);

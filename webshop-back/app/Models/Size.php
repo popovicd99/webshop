@@ -9,6 +9,8 @@ class Size extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function ps()
     {
         return $this->HasMany(PS::class);

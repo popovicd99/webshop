@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string("name");
             $table->string("desc");
             $table->decimal("price");
-            $table->string("size");
-            $table->integer("quantity");
         });
     }
 

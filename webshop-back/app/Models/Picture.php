@@ -9,6 +9,8 @@ class Picture extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function pp()
     {
         return $this->HasMany(PP::class);
