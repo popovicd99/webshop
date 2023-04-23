@@ -11,9 +11,9 @@ class Size extends Model
 
     public $timestamps = false;
 
-    public function ps()
+    public function products()
     {
-        return $this->HasMany(PS::class);
+        return $this->belongsToMany(Product::class,'ps','size_id','product_id');
     }
 
 }

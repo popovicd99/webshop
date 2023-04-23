@@ -11,18 +11,6 @@ class PP extends Model
 
     public $table = 'pp';
 
-    public $timestamps = false;
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function picture()
-    {
-        return $this->belongsTo(Picture::class);
-    }
-
-    
+    public $timestamps = false;    
 
 }

@@ -11,19 +11,21 @@ class Product extends Model
 
     public $timestamps = false;
 
-    public function order_items()
+    protected $guarded = ['id'];
+
+    public function orders()
     {
-        return $this->HasMany(OrderItems::class);
+        return $this->belongsToMany(Order::class,'order_items','product_id','order_id');
     }
 
-    public function pp()
+    public function sizes()
     {
-        return $this->HasMany(PP::class);
+        return $this->belongsToMany(Size::class,'ps','product_id','size_id');
     }
 
-    public function ps()
+    public function pictures()
     {
-        return $this->HasMany(PS::class);
+        return $this->belongsToMany(Picture::class,'pp','product_id','picture_id');
     }
 
 }

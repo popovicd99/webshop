@@ -11,9 +11,9 @@ class Picture extends Model
 
     public $timestamps = false;
 
-    public function pp()
+    public function products()
     {
-        return $this->HasMany(PP::class);
+        return $this->belongsToMany(Product::class,'pp','picture_id','product_id');
     }
 
 }
