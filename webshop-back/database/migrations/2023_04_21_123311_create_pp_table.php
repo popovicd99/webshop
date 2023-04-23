@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('pp', function (Blueprint $table) {
             $table->unsignedBigInteger("product_id");
             $table->unsignedBigInteger("picture_id");
-            $table->foreign("product_id")->references("id")->on("products");
-            $table->foreign("picture_id")->references("id")->on("pictures");
+            $table->foreign("product_id")->references("id")->on("products")->onDelete('cascade');
+            $table->foreign("picture_id")->references("id")->on("pictures")->onDelete('cascade');
         });
     }
 
