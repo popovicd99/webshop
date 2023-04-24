@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('ps', function (Blueprint $table) {
             $table->unsignedBigInteger("product_id");
+            $table->integer("quantity");
             $table->unsignedBigInteger("size_id");
             $table->foreign("product_id")->references("id")->on("products")->onDelete('cascade');
             $table->foreign("size_id")->references("id")->on("sizes")->onDelete('cascade');
