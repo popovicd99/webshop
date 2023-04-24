@@ -24,15 +24,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        
-        
+
+
 
         $user = User::factory()->create();
 
         $order = Order::factory()->create([
             'user_id' => $user->id
         ]);
-        
+
         $product = Product::factory()->create();
 
         $order_item = OrderItems::create([
@@ -55,9 +55,8 @@ class DatabaseSeeder extends Seeder
 
         $ps = PS::create([
             'size_id' => $size->id,
+            'quantity' => 0,
             'product_id' => $product->id
         ]);
-
-
     }
 }
