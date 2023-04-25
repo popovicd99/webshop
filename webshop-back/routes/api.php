@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -27,3 +28,7 @@ Route::resource('orders', OrderController::class)->only([
 Route::resource('products', ProductController::class)->only([
     'index', 'store', 'show', 'update', 'destroy'
 ]);
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
