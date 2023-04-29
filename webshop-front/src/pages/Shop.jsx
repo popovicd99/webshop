@@ -1,16 +1,20 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Products from "../components/Products";
+import { Navigate } from "react-router-dom";
 
-const Shop = () => {
-  return (
-    <>
-      <Navbar></Navbar>
-      <Products></Products>
-      <Footer></Footer>
-    </>
-  );
+const Shop = ({ token }) => {
+  if (token == null) {
+    return <Navigate to="/login" />;
+  } else {
+    return (
+      <>
+        <Products>
+          <Footer />
+        </Products>
+      </>
+    );
+  }
 };
 
 export default Shop;

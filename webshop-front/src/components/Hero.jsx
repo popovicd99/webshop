@@ -68,7 +68,7 @@ const Button = styled.a`
   }
 `;
 
-const Hero = () => {
+const Hero = ({ children }) => {
   return (
     <Container>
       <HeroWrap>
@@ -86,6 +86,7 @@ const Hero = () => {
           </Container>
         </HeroContent>
       </HeroWrap>
+      {children}
     </Container>
   );
 };
