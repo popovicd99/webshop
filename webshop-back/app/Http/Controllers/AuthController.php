@@ -36,14 +36,15 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) return response()->json(['error' => 'Unauthorized'], 401);
+        if (!Auth::attempt($request->only('email', 'password'))) return response()->json(['success' => false], 401);
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
         $token = $user->createToken('token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Uspesan login',
+            'success' => true,
+            'admin' => $user->is_admin,
             'token' => $token,
             'token_type' => 'Bearer'
         ]);
@@ -51,7 +52,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        auth('sanctum')->user()->tokens()->delete();
         return response()->json([
             'message' => 'Uspesan logout'
         ]);
