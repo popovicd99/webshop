@@ -1,5 +1,7 @@
 import React from "react";
-import { FiSearch, FiShoppingCart } from "react-icons/fi";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { FiShoppingCart } from "react-icons/fi";
+import axios from "axios";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -11,6 +13,9 @@ const Wrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media screen and (max-width: 390px) {
+    padding: 10px 0;
+  }
 `;
 
 const Left = styled.div`
@@ -22,21 +27,6 @@ const Logo = styled.h2`
   font-weight: bold;
   cursor: pointer;
 `;
-const SearchContainer = styled.div`
-  border: 0.5px solid black;
-  display: flex;
-  align-items: center;
-  margin-left: 30px;
-  padding: 4px;
-`;
-
-const Input = styled.input`
-  border: none;
-  &:focus,
-  &:active {
-    border: none;
-  }
-`;
 const Center = styled.div`
   flex: 1;
   display: flex;
@@ -47,6 +37,9 @@ const Center = styled.div`
 const CenterItem = styled.h5`
   font-weight: bold;
   cursor: pointer;
+  @media screen and (max-width: 39.9375em) {
+    font-size: 12px;
+  }
 `;
 
 const Right = styled.div`
@@ -54,37 +47,85 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  @media screen and (max-width: 39.9375em) {
+    justify-content: center;
+  }
 `;
 
 const MenuItem = styled.div`
   font-size: 17px;
-  padding: 10px;
+  padding: 13px;
   margin-left: 10px;
   cursor: pointer;
+  @media screen and (max-width: 39.9375em) {
+    font-size: 12px;
+    margin-left: 5px;
+  }
 `;
 
-const Navbar = () => {
+const Navbar = ({ token, addToken }) => {
+  const navigate = useNavigate();
+  function handleLogout(e) {
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "api/logout",
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        window.sessionStorage.setItem("token", null);
+        addToken(null);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   return (
     <Container>
       <Wrap>
         <Left>
-          <Logo>SNKR</Logo>
-          <SearchContainer>
-            <Input />
-            <FiSearch style={{ cursor: "pointer", fontSize: 18 }} />
-          </SearchContainer>
+          <Link to="/" style={{ color: "black" }}>
+            <Logo>SNKR</Logo>
+          </Link>
         </Left>
         <Center>
-          <CenterItem>PRODUCTS</CenterItem>
+          <Link to="/shop" style={{ color: "black" }}>
+            <CenterItem>PRODUCTS</CenterItem>
+          </Link>
         </Center>
         <Right>
-          <MenuItem>LOG IN</MenuItem>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>
-            <FiShoppingCart /> 0
-          </MenuItem>
+          {token == null ? (
+            <>
+              <Link to="/login" style={{ color: "black" }}>
+                <MenuItem>LOGIN</MenuItem>
+              </Link>
+              <Link to="/register" style={{ color: "black" }}>
+                <MenuItem>REGISTER</MenuItem>
+              </Link>
+              <Link to="/checkout" style={{ color: "black" }}>
+                <MenuItem>
+                  <FiShoppingCart /> 0
+                </MenuItem>
+              </Link>
+            </>
+          ) : (
+            <>
+              <MenuItem onClick={handleLogout}>LOGOUT</MenuItem>
+              <MenuItem>
+                <FiShoppingCart /> 0
+              </MenuItem>
+            </>
+          )}
         </Right>
       </Wrap>
+      <Outlet />
     </Container>
   );
 };
