@@ -1,14 +1,13 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import HeroLogin from "../components/HeroLogin";
 
-const Login = () => {
+const Login = ({ addToken }) => {
   return (
     <>
-      <Navbar></Navbar>
-      <HeroLogin></HeroLogin>
-      <Footer></Footer>
+      <HeroLogin addToken={addToken}>
+        <Footer />
+      </HeroLogin>
     </>
   );
 };

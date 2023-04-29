@@ -1,4 +1,7 @@
 import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 
 const Container = styled.div``;
@@ -63,29 +66,68 @@ const Input = styled.input`
   border-radius: 10px;
 `;
 
-const Link = styled.a`
-  font-weight: 500;
-  color: blue;
-`;
+const styles = {
+  link: {
+    fontWeight: "500",
+    color: "blue",
+  },
+};
 
-const HeroRegister = () => {
+const HeroRegister = ({ children }) => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  function handleInput(e) {
+    let data = userData;
+    data[e.target.name] = e.target.value;
+    setUserData(data);
+  }
+  function handleRegister(e) {
+    e.preventDefault();
+    axios
+      .post("api/register", userData)
+      .then((res) => {
+        navigate("/login");
+      })
+      .catch((ex) => {
+        console.log(ex);
+      });
+  }
   return (
     <Container>
       <HeroWrap>
         <HeroContent>
-          <Form>
+          <Form onSubmit={handleRegister} method="post">
             <Title>Become a member. Register now</Title>
             <Label>
               Full name
-              <Input type="text" placeholder="e.g. Ben Chillwell" />
+              <Input
+                type="text"
+                placeholder="e.g. Ben Chillwell"
+                name="name"
+                onInput={handleInput}
+              />
             </Label>
             <Label>
               Email
-              <Input type="email" placeholder="somebody@example.com" />
+              <Input
+                type="email"
+                placeholder="somebody@example.com"
+                name="email"
+                onInput={handleInput}
+              />
             </Label>
             <Label>
               Password
-              <Input type="password" placeholder="Password" />
+              <Input
+                type="password"
+                placeholder="Password"
+                name="password"
+                onInput={handleInput}
+              />
             </Label>
             <input
               type="submit"
@@ -94,11 +136,15 @@ const HeroRegister = () => {
             />
             <p style={{ fontWeight: 700 }}>
               Already a member?
-              <Link href="#"> Log in now</Link>
+              <Link style={styles.link} to="/login">
+                {" "}
+                Log in now
+              </Link>
             </p>
           </Form>
         </HeroContent>
       </HeroWrap>
+      {children}
     </Container>
   );
 };
