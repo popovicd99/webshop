@@ -6,9 +6,9 @@ import Admin from "../components/Admin";
 const AdminPanel = () => {
   return (
     <>
-      <Navbar></Navbar>
-      <Admin></Admin>
-      <Footer></Footer>
+      <Admin>
+        <Footer />
+      </Admin>
     </>
   );
 };

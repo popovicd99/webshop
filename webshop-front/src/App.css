@@ -117,3 +117,103 @@
 .multi-step-checkout-credit-card-info label span {
   color: #a4a4a4;
 }
+
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding-top: 60px;
+}
+.field {
+  border-radius: 30px;
+  border: 1px solid #111111;
+  opacity: 0.5;
+  transition: all ease 0.4s;
+  color: #111111;
+}
+.sign-in-form {
+  padding: 3rem 4.5em;
+  border-radius: 0.5rem;
+  background-color: #f5f5f5;
+}
+
+.sign-in-form h4 {
+  color: #111111;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sign-in-form label {
+  text-transform: uppercase;
+  color: #111111;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.sign-in-form input:focus {
+  opacity: 0.8;
+}
+.sign-in-form-button {
+  border-radius: 30px;
+  border: 1px solid #111111;
+  color: #111111;
+  background-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%;
+  padding: 1rem;
+  transition: all ease 0.4s;
+  margin-top: 20px;
+}
+
+.sign-in-form-button:hover {
+  background-color: #111111;
+  color: #f5f5f5;
+}
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  margin: 5% auto 15% auto;
+  border: 1px solid #888;
+  height: 650px;
+  width: 40%;
+}
+.close {
+  cursor: pointer;
+  align-self: flex-end;
+  margin-right: 5px;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s;
+}
+
+@-webkit-keyframes animatezoom {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes animatezoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
