@@ -25,6 +25,7 @@ function App() {
             <Route path='/register' element={<Register/>}/>
             <Route path='/shop' element={<Shop token={token}/>}/>
             <Route path='/checkout' element={<Checkout/>}/>
+            <Route path='/adminpanel' element={<AdminPanel/>}/>
         </Route>
         
         
