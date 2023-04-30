@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductSPCollection;
 use App\Http\Resources\ProductSPResource;
+use App\Models\Picture;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -36,8 +37,11 @@ class ProductController extends Controller
             'price' => $request->price
         ]);
 
-        foreach ($request->picture_id as $id) {
-            $product->pictures()->attach($id);
+        foreach ($request->pictures as $picture) {
+            $newPicture = Picture::create([
+                'file_path' => $picture->getClientOriginalName()
+            ]);
+            $product->pictures()->attach($newPicture->id);
         }
 
         return response()->json("Uspesno dodat");
