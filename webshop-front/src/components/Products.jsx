@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-
+import axios from "axios";
+import { useState, useEffect } from "react";
+import OneProduct from "./OneProduct";
 const Container = styled.div``;
 
 const Wrap = styled.div``;
@@ -63,13 +65,6 @@ const ProductPrice = styled.span`
   font-weight: 600;
   margin-top: 0.8rem;
 `;
-const ProductSale = styled.span`
-  color: #cacaca;
-  display: inline-block;
-  font-size: 0.85rem;
-  margin-left: 0.3rem;
-  text-decoration: line-through;
-`;
 
 const ProductPicturesContainer = styled.div`
   display: block;
@@ -82,6 +77,19 @@ const ProductPictures = styled.a`
   margin-right: 5px;
 `;
 const Products = ({ children }) => {
+  const [products, setProducts] = useState(null);
+  useEffect(() => {
+    if (products == null) {
+      axios
+        .get("api/products")
+        .then((res) => {
+          setProducts(res.data.products);
+        })
+        .catch((ex) => {
+          console.log(ex);
+        });
+    }
+  }, []);
   return (
     <>
       <Wrap className="row expanded">
@@ -258,35 +266,17 @@ const Products = ({ children }) => {
         </WrapLeft>
         <WrapRight className="columns medium-9 large-10">
           <div className="row small-up-2 medium-up-3 large-up-4">
-            <ProductBlock className="column column-block">
-              <ProductContainer>
-                <ProductThumbnail>
-                  <a href="#">
-                    <img src="https://placehold.it/300x200" />
-                  </a>
-                </ProductThumbnail>
-                <ProductTitle>
-                  <a href="#">Product Name</a>
-                </ProductTitle>
-                <ProductDesc>Product Description</ProductDesc>
-                <ProductSale>$12.99</ProductSale>
-                <ProductPrice>$9.99</ProductPrice>
-                <ProductPicturesContainer>
-                  <ProductPictures href="#">
-                    <img src="https://placehold.it/30x30" />
-                  </ProductPictures>
-                  <ProductPictures href="#">
-                    <img src="https://placehold.it/30x30" />
-                  </ProductPictures>
-                  <ProductPictures href="#">
-                    <img src="https://placehold.it/30x30" />
-                  </ProductPictures>
-                  <ProductPictures href="#">
-                    <img src="https://placehold.it/30x30" />
-                  </ProductPictures>
-                </ProductPicturesContainer>
-              </ProductContainer>
-            </ProductBlock>
+            {products == null ? (
+              <></>
+            ) : (
+              products.map((product) => {
+                return (
+                  <>
+                    <OneProduct product={product} key={""} />
+                  </>
+                );
+              })
+            )}
           </div>
         </WrapRight>
       </Wrap>
