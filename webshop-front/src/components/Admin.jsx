@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import $ from "jquery";
 import OneTableProduct from "./OneTableProduct";
 const HeroWrap = styled.div`
   width: 100%;
@@ -66,7 +67,12 @@ const Button = styled.div`
   margin-top: 10px;
 `;
 
-const Admin = ({ children }) => {
+const Admin = ({ children, token }) => {
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
   const [productData, setProductData] = useState({
     name: "",
     desc: "",
@@ -76,7 +82,7 @@ const Admin = ({ children }) => {
   useEffect(() => {
     if (products == null) {
       axios
-        .get("api/products")
+        .get("api/products", config)
         .then((res) => {
           setProducts(res.data.products);
         })
@@ -84,7 +90,7 @@ const Admin = ({ children }) => {
           console.log(ex);
         });
     }
-  }, []);
+  }, [products]);
 
   function handleInput(e) {
     let data = productData;
@@ -105,6 +111,7 @@ const Admin = ({ children }) => {
       .post("api/products", productData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + token,
         },
       })
       .then((res) => {
@@ -123,7 +130,78 @@ const Admin = ({ children }) => {
         console.log(ex);
       });
   }
+  var deafultSizes = {
+    42: "",
+    43: "",
+    44: "",
+    45: "",
+    46: "",
+    47: "",
+  };
+  const [sizes, setSizes] = useState(deafultSizes);
+  function handleSizeInput(e) {
+    let data = sizes;
+    data[e.target.name] = e.target.value;
+    setSizes(data);
+  }
+  function loadSizes(e, id) {
+    e.preventDefault();
+    for (let index = 42; index < 48; index++) {
+      $("#" + index).val("");
+    }
+    setSizes(deafultSizes);
+    sizes["id"] = id;
+    axios.get("api/products/" + id, config).then((res) => {
+      res.data.products.sizes.forEach((size) => {
+        $("#" + size.size).val(size.quantity);
+        sizes[size.size] = size.quantity;
+        setSizes(sizes);
+      });
+      document.getElementById("popupedit").style.display = "block";
+    });
+  }
+  function handleEditSizes(e) {
+    e.preventDefault();
+    let config = {
+      method: "patch",
+      maxBodyLength: Infinity,
+      url:
+        "api/products/" +
+        sizes["id"] +
+        "?42=" +
+        sizes["42"] +
+        "&43=" +
+        sizes["43"] +
+        "&44=" +
+        sizes["44"] +
+        "" +
+        "&45=" +
+        sizes["45"] +
+        "&46=" +
+        sizes["46"] +
+        "&47=" +
+        sizes["47"],
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
 
+    axios
+      .request(config)
+      .then((res) => {
+        console.log(res);
+        document.getElementById("popupedit").style.display = "none";
+      })
+      .catch((ex) => {
+        console.log(ex);
+      });
+  }
+  function remove(e, id) {
+    e.preventDefault();
+    axios.delete("api/products/" + id, config).then(() => {
+      setProducts(null);
+    });
+  }
   return (
     <>
       <div id="popupadd" className="popup">
@@ -168,7 +246,7 @@ const Admin = ({ children }) => {
               onInput={handleInput}
               required
             />
-            <label htmlFor="images">Price</label>
+            <label htmlFor="images">Images</label>
             <input
               type="file"
               className="field"
@@ -182,6 +260,84 @@ const Admin = ({ children }) => {
           </div>
         </form>
       </div>
+
+      <div id="popupedit" className="popup">
+        <form
+          method="POST"
+          className="popup-content animate"
+          onSubmit={handleEditSizes}
+        >
+          <div
+            className="close"
+            onClick={() =>
+              (document.getElementById("popupedit").style.display = "none")
+            }
+          >
+            &times;
+          </div>
+          <div className="sign-in-form">
+            <h4 className="text-center">Quantity</h4>
+            <label htmlFor="product">42</label>
+            <input
+              type="text"
+              name="42"
+              id="42"
+              className="field"
+              onInput={handleSizeInput}
+              required
+            />
+            <label htmlFor="product">43</label>
+            <input
+              type="text"
+              name="43"
+              id="43"
+              className="field"
+              onInput={handleSizeInput}
+              required
+            />
+            <label htmlFor="product">44</label>
+            <input
+              type="text"
+              name="44"
+              id="44"
+              className="field"
+              onInput={handleSizeInput}
+              required
+            />
+            <label htmlFor="product">45</label>
+            <input
+              type="text"
+              name="45"
+              id="45"
+              className="field"
+              onInput={handleSizeInput}
+              required
+            />
+            <label htmlFor="product">46</label>
+            <input
+              type="text"
+              name="46"
+              id="46"
+              className="field"
+              onInput={handleSizeInput}
+              required
+            />
+            <label htmlFor="product">47</label>
+            <input
+              type="text"
+              name="47"
+              id="47"
+              className="field"
+              onInput={handleSizeInput}
+              required
+            />
+            <button type="submit" className="sign-in-form-button">
+              Add quantity
+            </button>
+          </div>
+        </form>
+      </div>
+
       <HeroWrap>
         <HeroContent>
           <Button
@@ -225,9 +381,12 @@ const Admin = ({ children }) => {
               ) : (
                 products.map((product) => {
                   return (
-                    <>
-                      <OneTableProduct product={product} key={""} />
-                    </>
+                    <OneTableProduct
+                      product={product}
+                      key={product.id}
+                      loadSizes={loadSizes}
+                      remove={remove}
+                    />
                   );
                 })
               )}

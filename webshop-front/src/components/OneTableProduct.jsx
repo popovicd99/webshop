@@ -18,7 +18,7 @@ const Button = styled.div`
   margin-top: 10px;
 `;
 
-const OneTableProduct = ({ product }) => {
+const OneTableProduct = ({ product, loadSizes, remove }) => {
   return (
     <>
       <tr>
@@ -35,8 +35,18 @@ const OneTableProduct = ({ product }) => {
           <TableBodyText>{product.price}</TableBodyText>
         </td>
         <td>
-          <Button className="button warning">Edit Sizes</Button>
-          <Button className="button alert">Remove</Button>
+          <Button
+            className="button warning"
+            onClick={(e) => loadSizes(e, product.id)}
+          >
+            Edit Sizes
+          </Button>
+          <Button
+            className="button alert"
+            onClick={(e) => remove(e, product.id)}
+          >
+            Remove
+          </Button>
         </td>
       </tr>
     </>
