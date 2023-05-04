@@ -63,7 +63,7 @@ const MenuItem = styled.div`
   }
 `;
 
-const Navbar = ({ token, addToken }) => {
+const Navbar = ({ token, addToken, admin, addAdmin, cartNumber }) => {
   const navigate = useNavigate();
   function handleLogout(e) {
     let config = {
@@ -71,7 +71,7 @@ const Navbar = ({ token, addToken }) => {
       maxBodyLength: Infinity,
       url: "api/logout",
       headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+        Authorization: "Bearer " + token,
       },
     };
 
@@ -79,8 +79,8 @@ const Navbar = ({ token, addToken }) => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        window.sessionStorage.setItem("token", null);
         addToken(null);
+        addAdmin(null);
         navigate("/");
       })
       .catch((error) => {
@@ -115,12 +115,21 @@ const Navbar = ({ token, addToken }) => {
                 </MenuItem>
               </Link>
             </>
+          ) : admin === 1 ? (
+            <>
+              <MenuItem onClick={handleLogout}>LOGOUT</MenuItem>
+              <Link to="/adminpanel" style={{ color: "black" }}>
+                <MenuItem>Admin panel</MenuItem>
+              </Link>
+            </>
           ) : (
             <>
               <MenuItem onClick={handleLogout}>LOGOUT</MenuItem>
-              <MenuItem>
-                <FiShoppingCart /> 0
-              </MenuItem>
+              <Link to="/checkout" style={{ color: "black" }}>
+                <MenuItem>
+                  <FiShoppingCart /> {cartNumber}
+                </MenuItem>
+              </Link>
             </>
           )}
         </Right>
