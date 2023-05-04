@@ -2,10 +2,10 @@ import React from "react";
 import Footer from "../components/Footer";
 import HeroLogin from "../components/HeroLogin";
 
-const Login = ({ addToken }) => {
+const Login = ({ addToken, addAdmin }) => {
   return (
     <>
-      <HeroLogin addToken={addToken}>
+      <HeroLogin addToken={addToken} addAdmin={addAdmin}>
         <Footer />
       </HeroLogin>
     </>
