@@ -1,15 +1,15 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Product from "../components/Product";
 import Footer from "../components/Footer";
-
-const Product = () => {
+import { useParams } from "react-router-dom";
+const SingleProduct = ({ addToCart }) => {
+  const { slug } = useParams();
   return (
     <>
-      <Navbar></Navbar>
-      <Product></Product>
+      <Product slug={slug} addToCart={addToCart}></Product>
       <Footer></Footer>
     </>
   );
 };
 
-export default Product;
+export default SingleProduct;

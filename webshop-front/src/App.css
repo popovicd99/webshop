@@ -128,7 +128,7 @@
   height: 100%;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.4);
-  padding-top: 60px;
+  padding-top: 20px;
 }
 .field {
   border-radius: 30px;
@@ -138,7 +138,7 @@
   color: #111111;
 }
 .sign-in-form {
-  padding: 3rem 4.5em;
+  padding: 1.5rem 4.5em;
   border-radius: 0.5rem;
   background-color: #f5f5f5;
 }
@@ -216,4 +216,42 @@
   to {
     transform: scale(1);
   }
+}
+
+.mobile-app-message-bar {
+  height: 5rem;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background: #fefefe;
+}
+
+.mobile-app-message-bar .plus-button {
+  -webkit-flex-shrink: 1;
+  -ms-flex-negative: 1;
+  flex-shrink: 1;
+  font-size: 17px;
+  padding: 13px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.mobile-app-message-bar .message-input input {
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+.mobile-app-message-bar .message-input input {
+  text-align: center;
+}
+
+.mobile-app-message-bar .message-input input[type="text"] {
+  border-radius: 0.625rem;
+  margin: 0;
 }
