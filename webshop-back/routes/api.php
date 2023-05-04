@@ -17,18 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
 
 Route::resource('orders', OrderController::class)->only([
     'index', 'store', 'show', 'destroy'
 ]);
-
-Route::resource('products', ProductController::class)->only([
-    'index', 'store', 'show', 'update', 'destroy'
-]);
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::group(["middleware" => ["auth:sanctum"]], function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::resource('products', ProductController::class)->only([
+        'store', 'update', 'destroy'
+    ]);
+});
+Route::resource('products', ProductController::class)->only([
+    'index', 'show'
+]);
+Route::get('/product/{name}', [ProductController::class, 'getbyName']);
+Route::post('/product', [ProductController::class, 'updateSizes']);
