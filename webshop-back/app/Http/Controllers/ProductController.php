@@ -6,6 +6,8 @@ use App\Http\Resources\ProductSPCollection;
 use App\Http\Resources\ProductSPResource;
 use App\Models\Picture;
 use App\Models\Product;
+use App\Models\PS;
+use App\Models\Size;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -43,7 +45,9 @@ class ProductController extends Controller
             ]);
             $product->pictures()->attach($newPicture->id);
         }
-
+        foreach (Size::get() as $size) {
+            $product->sizes()->attach($size->id);
+        }
         return response()->json("Uspesno dodat");
     }
 
@@ -69,10 +73,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        $product->name = $request->name;
-        $product->desc = $request->desc;
-        $product->price = $request->price;
-        $product->update();
+        $ids = $product->sizes()->allRelatedIds();
+        $products = new ProductSPResource(Product::with(['sizes', 'pictures'])->find($product->id));
+        foreach ($ids as $id) {
+            $products->sizes()->updateExistingPivot($id, ['quantity' => $request->input($id + 41)]);
+        }
         return response()->json("Uspesno updateovan");
     }
 
@@ -86,5 +91,25 @@ class ProductController extends Controller
     {
         $product->delete();
         return response()->json("Uspesno izbrisan");
+    }
+
+    public function getbyName(String $name)
+    {
+        $product = new ProductSPResource(Product::with(['sizes', 'pictures'])->where('name', 'LIKE', $name)->first());
+        return response()->json([
+            'product' => $product
+        ], 200);
+    }
+    public function updateSizes(Request $request)
+    {
+        foreach ($request->products as $product) {
+            $pr = new ProductSPResource(Product::with(['sizes', 'pictures'])->find($product['id']));
+            foreach ($product['sizes'] as $size) {
+                $var = PS::where('product_id', '=', $product['id'])->where('size_id', '=', $size['size'] - 41)->first();
+                $var["quantity"] = $var["quantity"] - $size['quantity'];
+                $pr->sizes()->updateExistingPivot($size['size'] - 41, ['quantity' => $var["quantity"]]);
+                return response()->json("Uspesno promenjeno stanje");
+            }
+        }
     }
 }
