@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 const Container = styled.div``;
 
 const HeroWrap = styled.div`
@@ -54,7 +54,7 @@ const Description = styled.p`
   margin-bottom: 1rem;
 `;
 
-const Button = styled.a`
+const Button = styled.p`
   border: 1px solid white;
   color: white;
   background-color: transparent;
@@ -80,9 +80,9 @@ const Hero = ({ children }) => {
             felis pharetra fermentum.
           </Description>
           <Container>
-            <Button href="#" className="button white-hollow">
-              Shop now
-            </Button>
+            <Link to="/shop">
+              <Button className="button white-hollow">Shop now</Button>
+            </Link>
           </Container>
         </HeroContent>
       </HeroWrap>
