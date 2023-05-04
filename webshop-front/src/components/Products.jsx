@@ -3,7 +3,6 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import OneProduct from "./OneProduct";
-const Container = styled.div``;
 
 const Wrap = styled.div``;
 const WrapLeft = styled.div``;
@@ -32,50 +31,7 @@ const FilterName = styled.a`
 const Label = styled.label`
   color: #8a8a8a;
 `;
-const ProductBlock = styled.div`
-  padding: 1rem;
-`;
-const ProductContainer = styled.div`
-  background-color: #fefefe;
-  border: 1px solid #e6e6e6;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  margin-top: 30px;
-`;
-const ProductThumbnail = styled.div`
-  display: block;
-  position: relative;
-`;
-const ProductTitle = styled.h2`
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.45rem;
-  margin-top: 1rem;
-  margin-bottom: 0;
-`;
-const ProductDesc = styled.span`
-  color: #8a8a8a;
-  display: block;
-  font-size: 0.85rem;
-`;
-const ProductPrice = styled.span`
-  color: #3e3e3e;
-  display: inline-block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-top: 0.8rem;
-`;
 
-const ProductPicturesContainer = styled.div`
-  display: block;
-  margin-top: 0.8rem;
-`;
-const ProductPictures = styled.a`
-  display: inline-block;
-  height: 25px;
-  width: 25px;
-  margin-right: 5px;
-`;
 const Products = ({ children }) => {
   const [products, setProducts] = useState(null);
   useEffect(() => {
@@ -89,7 +45,7 @@ const Products = ({ children }) => {
           console.log(ex);
         });
     }
-  }, []);
+  }, [products]);
   return (
     <>
       <Wrap className="row expanded">
@@ -270,11 +226,7 @@ const Products = ({ children }) => {
               <></>
             ) : (
               products.map((product) => {
-                return (
-                  <>
-                    <OneProduct product={product} key={""} />
-                  </>
-                );
+                return <OneProduct product={product} key={product.id} />;
               })
             )}
           </div>

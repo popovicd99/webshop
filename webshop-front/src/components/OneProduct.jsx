@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const ProductBlock = styled.div`
@@ -39,7 +40,7 @@ const ProductPicturesContainer = styled.div`
   display: block;
   margin-top: 0.8rem;
 `;
-const ProductPictures = styled.a`
+const ProductPictures = styled.img`
   display: inline-block;
   height: 25px;
   width: 25px;
@@ -51,7 +52,7 @@ const OneProduct = ({ product }) => {
       <ProductBlock className="column column-block">
         <ProductContainer>
           <ProductThumbnail>
-            <a href="#">
+            <Link to={"/product/" + product.name}>
               <img
                 src={
                   product.pictures[0] != null
@@ -59,50 +60,51 @@ const OneProduct = ({ product }) => {
                     : "https://placehold.it/30x30"
                 }
               />
-            </a>
+            </Link>
           </ProductThumbnail>
           <ProductTitle>
-            <a href="#">{product.name}</a>
+            <Link to={"/product/" + product.name}>{product.name}</Link>
           </ProductTitle>
           <ProductDesc>{product.desc}</ProductDesc>
           <ProductPrice>${product.price}</ProductPrice>
           <ProductPicturesContainer>
-            <ProductPictures href="#">
-              <img
+            <Link to={"/product/" + product.name}>
+              <ProductPictures
                 src={
                   product.pictures[1] != null
                     ? "/products/" + product.pictures[1].file_path
                     : "https://placehold.it/30x30"
                 }
               />
-            </ProductPictures>
-            <ProductPictures href="#">
-              <img
+            </Link>
+
+            <Link to={"/product/" + product.name}>
+              <ProductPictures
                 src={
                   product.pictures[2] != null
                     ? "/products/" + product.pictures[2].file_path
                     : "https://placehold.it/30x30"
                 }
               />
-            </ProductPictures>
-            <ProductPictures href="#">
-              <img
+            </Link>
+            <Link to={"/product/" + product.name}>
+              <ProductPictures
                 src={
                   product.pictures[3] != null
                     ? "/products/" + product.pictures[3].file_path
                     : "https://placehold.it/30x30"
                 }
               />
-            </ProductPictures>
-            <ProductPictures href="#">
-              <img
+            </Link>
+            <Link to={"/product/" + product.name}>
+              <ProductPictures
                 src={
                   product.pictures[4] != null
                     ? "/products/" + product.pictures[4].file_path
                     : "https://placehold.it/30x30"
                 }
               />
-            </ProductPictures>
+            </Link>
           </ProductPicturesContainer>
         </ProductContainer>
       </ProductBlock>
