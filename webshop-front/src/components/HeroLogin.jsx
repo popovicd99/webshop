@@ -73,7 +73,7 @@ const styles = {
   },
 };
 
-const HeroLogin = ({ addToken, children }) => {
+const HeroLogin = ({ addToken, children, addAdmin }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     email: "",
@@ -90,8 +90,7 @@ const HeroLogin = ({ addToken, children }) => {
       .post("api/login", userData)
       .then((res) => {
         if (res.data.success === true) {
-          window.sessionStorage.setItem("token", res.data.token);
-          window.sessionStorage.setItem("admin", res.data.admin);
+          addAdmin(res.data.admin);
           addToken(res.data.token);
           navigate("/shop");
         }
