@@ -20,6 +20,7 @@ class SizeCollection extends ResourceCollection
 
             array_push($sizes, [
                 'size' => $size->size,
+                'quantity' => $size->pivot->quantity
             ]);
         }
 
