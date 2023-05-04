@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\Size;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,39 +25,39 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-
-
-
-        $user = User::factory()->create();
-
-        $order = Order::factory()->create([
-            'user_id' => $user->id
+        $user = User::create([
+            'name' => "Danilo",
+            'email' => "admin@admin.com",
+            'email_verified_at' => now(),
+            'password' => Hash::make("123"), // password
+            'is_admin' => 1
         ]);
 
-        $product = Product::factory()->create();
-
-        $order_item = OrderItems::create([
-            'order_id' => $order->id,
-            'product_id' => $product->id
+        $user = User::create([
+            'name' => "Makro",
+            'email' => "marko@marko.com",
+            'email_verified_at' => now(),
+            'password' => Hash::make("123"), // password
+            'is_admin' => 0
         ]);
 
-        $size = Size::create([
-            'size' => '43'
+        Size::create([
+            'size' => '42',
         ]);
-
-        $picture = Picture::create([
-            'file_path' => 'Neki path'
+        Size::create([
+            'size' => '43',
         ]);
-
-        $pp = PP::create([
-            'picture_id' => $picture->id,
-            'product_id' => $product->id
+        Size::create([
+            'size' => '44',
         ]);
-
-        $ps = PS::create([
-            'size_id' => $size->id,
-            'quantity' => 0,
-            'product_id' => $product->id
+        Size::create([
+            'size' => '45',
+        ]);
+        Size::create([
+            'size' => '46',
+        ]);
+        Size::create([
+            'size' => '47',
         ]);
     }
 }
