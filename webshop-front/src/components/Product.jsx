@@ -63,6 +63,7 @@ const Product = ({ slug, addToCart }) => {
         ],
       };
       addToCart(orderedProduct);
+      alert("Porizvod uspesno dodat u korpu!");
     }
   }
 
