@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import $ from "jquery";
+import axios from "axios";
 import { Accordion } from "foundation-sites";
+import { useEffect, useState } from "react";
 
 const Container = styled.div``;
 
@@ -47,11 +49,64 @@ const HeroContent = styled.div`
   -webkit-transform: translate(-50%, -50%);
 `;
 
-const HeroCheckout = () => {
-  new Accordion($(".accordion"), {
-    slideSpeed: 500,
-    multiExpand: false,
+const HeroCheckout = ({
+  children,
+  cartProducts,
+  setcartNumber,
+  setcartProducts,
+  user,
+}) => {
+  const [orderData, setOrderData] = useState({
+    phone: "",
+    adress: "",
+    city: "",
+    postcode: "",
+    user_id: "",
+    product_id: [],
   });
+
+  function handleInput(e) {
+    let data = orderData;
+    data[e.target.name] = e.target.value;
+    setOrderData(data);
+  }
+
+  function handleAddOrder(e) {
+    e.preventDefault();
+    cartProducts.products.forEach((element) => {
+      orderData["product_id"].push(element.id);
+      setOrderData(orderData);
+    });
+    orderData["user_id"] = user;
+    axios
+      .post("api/orders", orderData)
+      .then((res) => {
+        axios
+          .post("api/product", cartProducts)
+          .then((res) => {
+            setcartProducts({
+              products: [],
+              sum: 0,
+            });
+            setcartNumber(0);
+            alert("Uspesna porudzbina!");
+          })
+          .catch((ex) => {
+            console.log(ex);
+          });
+      })
+      .catch((ex) => {
+        console.log(ex);
+      });
+  }
+
+  useEffect(() => {
+    new Accordion($(".accordion"), {
+      slideSpeed: 500,
+      multiExpand: false,
+    });
+  }, []);
+
   return (
     <>
       <HeroWrap>
@@ -85,17 +140,16 @@ const HeroCheckout = () => {
                             <label>
                               <input
                                 type="text"
-                                placeholder="First Name"
-                                required
-                              />
-                              <input
-                                type="text"
-                                placeholder="Last Name"
-                                required
-                              />
-                              <input
-                                type="text"
                                 placeholder="Address"
+                                name="adress"
+                                onInput={handleInput}
+                                required
+                              />
+                              <input
+                                type="text"
+                                name="country"
+                                placeholder="Country"
+                                onInput={handleInput}
                                 required
                               />
                               <div className="row">
@@ -103,6 +157,8 @@ const HeroCheckout = () => {
                                   <input
                                     type="text"
                                     placeholder="City"
+                                    name="city"
+                                    onInput={handleInput}
                                     required
                                   />
                                 </div>
@@ -110,21 +166,21 @@ const HeroCheckout = () => {
                                   <input
                                     type="text"
                                     placeholder="ZIP"
+                                    name="postcode"
+                                    onInput={handleInput}
                                     required
                                   />
                                 </div>
                               </div>
-
-                              <div>
-                                <hr className="multi-step-checkout-form-divider" />
-                              </div>
-                              <input type="text" placeholder="Email" required />
-                              <input type="text" placeholder="Phone" required />
+                              <input
+                                type="text"
+                                placeholder="Phone"
+                                required
+                                name="phone"
+                                onInput={handleInput}
+                              />
                             </label>
                           </div>
-                          <button className="primary button expanded">
-                            Continue to Payment
-                          </button>
                         </div>
                       </div>
                     </form>
@@ -146,14 +202,10 @@ const HeroCheckout = () => {
                             <h6 className="multi-step-checkout-step-subheader">
                               Credit Card
                             </h6>
-                            <input
-                              type="text"
-                              placeholder="Card Number"
-                              required
-                            />
+                            <input type="text" placeholder="Card Number" />
                             <div className="row small-up-1 large-up-3">
                               <div className="small-4 medium-7 column column-block">
-                                <select required>
+                                <select>
                                   <option value="january">01</option>
                                   <option value="february">02</option>
                                   <option value="march">03</option>
@@ -161,7 +213,7 @@ const HeroCheckout = () => {
                                 </select>
                               </div>
                               <div className="small-4 medium-7 column column-block">
-                                <select required>
+                                <select>
                                   <option value="year1">2019</option>
                                   <option value="year2">2018</option>
                                   <option value="year3">2017</option>
@@ -169,17 +221,9 @@ const HeroCheckout = () => {
                                 </select>
                               </div>
                               <div className="small-4 medium-7 column column-block">
-                                <input type="text" placeholder="CVV" required />
+                                <input type="text" placeholder="CVV" />
                               </div>
                             </div>
-
-                            <div>
-                              <hr className="multi-step-checkout-form-divider" />
-                            </div>
-
-                            <button className="primary button expanded">
-                              Continue to Review Order
-                            </button>
                           </div>
                         </div>
                       </div>
@@ -207,45 +251,92 @@ const HeroCheckout = () => {
                         </tr>
                       </thead>
                       <tbody>
+                        {cartProducts == null ? (
+                          <></>
+                        ) : (
+                          cartProducts.products.map((product) => {
+                            return (
+                              <tr className="order-item" key={product.id}>
+                                <td>
+                                  <img
+                                    className="order-product-image"
+                                    src={
+                                      product.picture != null
+                                        ? "/products/" +
+                                          product.picture.file_path
+                                        : "https://placehold.it/100x100"
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <span className="order-product-title">
+                                    {product.name}
+                                  </span>
+                                  <ul className="order-product-info">
+                                    <li>
+                                      Size:{" "}
+                                      {product.sizes.map((size) => {
+                                        return size.size + ",";
+                                      })}
+                                    </li>
+                                  </ul>
+                                </td>
+                                <td>
+                                  <span className="show-for-small-only">
+                                    Qty:
+                                  </span>
+                                  {product.sizes.map((size) => {
+                                    return size.quantity + ",";
+                                  })}
+                                </td>
+                                <td>
+                                  <span className="show-for-small-only">
+                                    Price Each:
+                                  </span>
+                                  <span className="order-product-price">
+                                    ${product.price}
+                                  </span>
+                                  <span className="show-for-small-only">,</span>
+                                  <br className="hide-for-small-only" />
+                                </td>
+                                <td>
+                                  <span className="show-for-small-only">
+                                    Total:
+                                  </span>
+                                  <span className="order-product-total">
+                                    ${product.sum}
+                                  </span>
+                                </td>
+                              </tr>
+                            );
+                          })
+                        )}
                         <tr className="order-item">
+                          <td></td>
                           <td>
-                            <img
-                              className="order-product-image"
-                              src="https://placehold.it/100x100"
-                            />
+                            <span className="order-product-title"></span>
+                            <ul className="order-product-info"></ul>
                           </td>
                           <td>
-                            <span className="order-product-title">
-                              Product 1
-                            </span>{" "}
-                            <span className="order-product-vendor">
-                              Vendor 1
-                            </span>
-                            <ul className="order-product-info">
-                              <li>Name</li>
-                              <li>Size: 43</li>
-                            </ul>
+                            <span className="show-for-small-only"></span>
                           </td>
                           <td>
-                            <span className="show-for-small-only">Qty:</span> 1
-                          </td>
-                          <td>
-                            <span className="show-for-small-only">
-                              Price Each:{" "}
-                            </span>
-                            <span className="order-product-price">$25.00</span>
+                            <span className="show-for-small-only"></span>
+                            <span className="order-product-price"></span>
                             <span className="show-for-small-only">,</span>
                             <br className="hide-for-small-only" />
                           </td>
                           <td>
-                            <span className="show-for-small-only">Total: </span>
-                            <span className="order-product-total">$25.00</span>
+                            <span className="show-for-small-only">Total:</span>
+                            <span className="order-product-total">
+                              ${cartProducts.sum}
+                            </span>
                           </td>
                         </tr>
                       </tbody>
                     </table>
                     <div className="">
-                      <form>
+                      <form method="POST" onSubmit={handleAddOrder}>
                         <button className="primary button expanded">
                           Submit Order
                         </button>
@@ -258,6 +349,7 @@ const HeroCheckout = () => {
           </div>
         </HeroContent>
       </HeroWrap>
+      {children}
     </>
   );
 };

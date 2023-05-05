@@ -1,14 +1,18 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import HeroCheckout from "../components/HeroCheckout";
 
-const Checkout = () => {
+const Checkout = ({ cartProducts, setcartNumber, setcartProducts, user }) => {
   return (
     <>
-      <Navbar></Navbar>
-      <HeroCheckout></HeroCheckout>
-      <Footer></Footer>
+      <HeroCheckout
+        cartProducts={cartProducts}
+        setcartNumber={setcartNumber}
+        setcartProducts={setcartProducts}
+        user={user}
+      >
+        <Footer />
+      </HeroCheckout>
     </>
   );
 };
