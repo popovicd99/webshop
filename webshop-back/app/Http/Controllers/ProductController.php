@@ -124,14 +124,14 @@ class ProductController extends Controller
     {
         $bottom = 0;
         $top = 0;
-        if ($request['price'] == null) {
+        if ($request['price'] == 0) {
             $products = new ProductSPCollection(Product::with(["sizes" => function ($query) use ($request) {
                 $query->where('size_id', '=', $request['size'] - 41)->where('quantity', '!=', 0);
             }, 'pictures'])->get());
             return response()->json([
                 'products' => $products
             ], 200);
-        } else if ($request['size'] == null) {
+        } else if ($request['size'] == 0) {
             switch ($request['price']) {
                 case 1:
                     $bottom = 0;
