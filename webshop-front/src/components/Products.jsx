@@ -34,6 +34,8 @@ const Label = styled.label`
 
 const Products = ({ children }) => {
   const [products, setProducts] = useState(null);
+  const [fltrSize, setfltrSize] = useState(null);
+  const [fltrPrice, setfltrPrice] = useState(null);
   useEffect(() => {
     if (products == null) {
       axios
@@ -45,66 +47,119 @@ const Products = ({ children }) => {
           console.log(ex);
         });
     }
-  }, [products]);
+  }, []);
+  useEffect(() => {
+    var string;
+    if (fltrSize != null || fltrPrice != null) {
+      string = "?size=" + fltrSize + "&price=" + fltrPrice;
+      axios
+        .get("api/filter" + string)
+        .then((res) => {
+          setProducts(res.data.products);
+        })
+        .catch((ex) => {
+          console.log(ex);
+        });
+    }
+  }, [fltrSize, fltrPrice]);
+
+  function search(e) {
+    var searchValue = e.target.value;
+    if (searchValue != "") {
+      axios
+        .get("api/search/" + searchValue)
+        .then((res) => {
+          setProducts(res.data.products);
+        })
+        .catch((ex) => {
+          console.log(ex);
+        });
+    }
+  }
+  function filterSize(e) {
+    setfltrSize(e.target.id);
+  }
+
+  function filterPrice(e) {
+    setfltrPrice(e.target.id);
+  }
   return (
     <>
       <Wrap className="row expanded">
         <WrapLeft className="columns medium-3 large-2">
           <Filters>
-            <ul
-              className="vertical menu hide-for-small-only"
-              data-accordion-menu
-            >
+            <ul className="vertical menu hide-for-small-only">
               <FilterHeader className="hide-for-small-only">
                 Filters
               </FilterHeader>
               <FilterTab>
-                <FilterName>Category</FilterName>
-                <ul className="menu vertical nested">
-                  <li>
-                    <input id="category-checkbox1" type="checkbox" />
-                    <Label htmlFor="category-checkbox1">Category 1</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox2" type="checkbox" />
-                    <Label htmlFor="category-checkbox2">Category 2</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox3" type="checkbox" />
-                    <Label htmlFor="category-checkbox3">Category 3</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox4" type="checkbox" />
-                    <Label htmlFor="category-checkbox4">Category 4</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox5" type="checkbox" />
-                    <Label htmlFor="category-checkbox5">Category 5</Label>
-                  </li>
-                </ul>
+                <FilterName>Search</FilterName>
+                <div className="input-group">
+                  <input
+                    className="input-group-field"
+                    placeholder="Unesite naziv proizvoda"
+                    type="search"
+                    style={{ borderRadius: 30 }}
+                    onInput={search}
+                  />
+                </div>
               </FilterTab>
               <FilterTab>
                 <FilterName>Size</FilterName>
                 <ul className="menu vertical nested">
                   <li>
-                    <input id="size-checkbox1" type="checkbox" />
-                    <Label htmlFor="size-checkbox1">Small</Label>
+                    <input
+                      id="42"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>42</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox2" type="checkbox" />
-                    <Label htmlFor="size-checkbox2">Medium</Label>
+                    <input
+                      id="43"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>43</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox3" type="checkbox" />
-                    <Label htmlFor="size-checkbox3">Large</Label>
+                    <input
+                      id="44"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>44</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox3" type="checkbox" />
-                    <Label htmlFor="size-checkbox3">X-Large</Label>
+                    <input
+                      id="45"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>45</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox3" type="checkbox" />
-                    <Label htmlFor="size-checkbox3">XX-Large</Label>
+                    <input
+                      id="46"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>46</Label>
+                  </li>
+                  <li>
+                    <input
+                      id="47"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>47</Label>
                   </li>
                 </ul>
               </FilterTab>
@@ -112,83 +167,126 @@ const Products = ({ children }) => {
                 <FilterName>Price</FilterName>
                 <ul className="menu vertical nested">
                   <li>
-                    <input id="price-checkbox1" type="checkbox" />
-                    <Label htmlFor="price-checkbox1">Under $25</Label>
+                    <input
+                      id="1"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>Under $25</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox2" type="checkbox" />
-                    <Label htmlFor="price-checkbox2">$25–$50</Label>
+                    <input
+                      id="2"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$25–$50</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox3" type="checkbox" />
-                    <Label htmlFor="price-checkbox3">$50–$250</Label>
+                    <input
+                      id="3"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$50–$250</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox4" type="checkbox" />
-                    <Label htmlFor="price-checkbox4">$250–$600</Label>
+                    <input
+                      id="4"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$250–$600</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox4" type="checkbox" />
-                    <Label htmlFor="price-checkbox4">$600–$1,000</Label>
+                    <input
+                      id="5"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$600–$1,000</Label>
                   </li>
                 </ul>
               </FilterTab>
             </ul>
 
-            <ul
-              className="vertical menu show-for-small-only"
-              data-accordion-menu
-            >
+            <ul className="vertical menu show-for-small-only">
               <FilterHeader className="show-for-small-only">
                 Filters
               </FilterHeader>
               <FilterTab>
-                <FilterName>Category</FilterName>
-                <ul className="menu vertical nested">
-                  <li>
-                    <input id="category-checkbox1" type="checkbox" />
-                    <Label htmlFor="category-checkbox1">Category 1</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox2" type="checkbox" />
-                    <Label htmlFor="category-checkbox2">Category 2</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox3" type="checkbox" />
-                    <Label htmlFor="category-checkbox3">Category 3</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox4" type="checkbox" />
-                    <Label htmlFor="category-checkbox4">Category 4</Label>
-                  </li>
-                  <li>
-                    <input id="category-checkbox5" type="checkbox" />
-                    <Label htmlFor="category-checkbox5">Category 5</Label>
-                  </li>
-                </ul>
+                <FilterName>Search</FilterName>
+                <div className="input-group">
+                  <input
+                    className="input-group-field"
+                    placeholder="Unesite naziv proizvoda"
+                    type="search"
+                    style={{ borderRadius: 30 }}
+                    onInput={search}
+                  />
+                </div>
               </FilterTab>
               <FilterTab>
                 <FilterName>Size</FilterName>
                 <ul className="menu vertical nested">
                   <li>
-                    <input id="size-checkbox1" type="checkbox" />
-                    <Label htmlFor="size-checkbox1">Small</Label>
+                    <input
+                      id="42"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>42</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox2" type="checkbox" />
-                    <Label htmlFor="size-checkbox2">Medium</Label>
+                    <input
+                      id="43"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>43</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox3" type="checkbox" />
-                    <Label htmlFor="size-checkbox3">Large</Label>
+                    <input
+                      id="44"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>44</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox3" type="checkbox" />
-                    <Label htmlFor="size-checkbox3">X-Large</Label>
+                    <input
+                      id="45"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>45</Label>
                   </li>
                   <li>
-                    <input id="size-checkbox3" type="checkbox" />
-                    <Label htmlFor="size-checkbox3">XX-Large</Label>
+                    <input
+                      id="46"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>46</Label>
+                  </li>
+                  <li>
+                    <input
+                      id="47"
+                      name="size"
+                      type="radio"
+                      onChange={filterSize}
+                    />
+                    <Label>47</Label>
                   </li>
                 </ul>
               </FilterTab>
@@ -196,24 +294,49 @@ const Products = ({ children }) => {
                 <FilterName>Price</FilterName>
                 <ul className="menu vertical nested">
                   <li>
-                    <input id="price-checkbox1" type="checkbox" />
-                    <Label htmlFor="price-checkbox1">Under $25</Label>
+                    <input
+                      id="1"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>Under $25</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox2" type="checkbox" />
-                    <Label htmlFor="price-checkbox2">$25–$50</Label>
+                    <input
+                      id="2"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$25–$50</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox3" type="checkbox" />
-                    <Label htmlFor="price-checkbox3">$50–$250</Label>
+                    <input
+                      id="3"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$50–$250</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox4" type="checkbox" />
-                    <Label htmlFor="price-checkbox4">$250–$600</Label>
+                    <input
+                      id="4"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$250–$600</Label>
                   </li>
                   <li>
-                    <input id="price-checkbox4" type="checkbox" />
-                    <Label htmlFor="price-checkbox4">$600–$1,000</Label>
+                    <input
+                      id="5"
+                      name="price"
+                      type="radio"
+                      onChange={filterPrice}
+                    />
+                    <Label>$600–$1,000</Label>
                   </li>
                 </ul>
               </FilterTab>
@@ -226,7 +349,11 @@ const Products = ({ children }) => {
               <></>
             ) : (
               products.map((product) => {
-                return <OneProduct product={product} key={product.id} />;
+                return product["sizes"].length == 0 ? (
+                  <></>
+                ) : (
+                  <OneProduct product={product} key={product.id} />
+                );
               })
             )}
           </div>
