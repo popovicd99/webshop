@@ -112,4 +112,81 @@ class ProductController extends Controller
             }
         }
     }
+    public function search(String $name)
+    {
+        $products = new ProductSPCollection(Product::with(['sizes', 'pictures'])->where('name', 'LIKE', '%' . $name . '%')->get());
+        return response()->json([
+            'products' => $products
+        ], 200);
+    }
+
+    public function filter(Request $request)
+    {
+        $bottom = 0;
+        $top = 0;
+        if ($request['price'] == null) {
+            $products = new ProductSPCollection(Product::with(["sizes" => function ($query) use ($request) {
+                $query->where('size_id', '=', $request['size'] - 41)->where('quantity', '!=', 0);
+            }, 'pictures'])->get());
+            return response()->json([
+                'products' => $products
+            ], 200);
+        } else if ($request['size'] == null) {
+            switch ($request['price']) {
+                case 1:
+                    $bottom = 0;
+                    $top = 25;
+                    break;
+                case 2:
+                    $bottom = 25;
+                    $top = 50;
+                    break;
+                case 3:
+                    $bottom = 50;
+                    $top = 250;
+                    break;
+                case 4:
+                    $bottom = 250;
+                    $top = 600;
+                    break;
+                case 5:
+                    $bottom = 600;
+                    $top = 1000;
+                    break;
+            }
+            $products = new ProductSPCollection(Product::with(["sizes", 'pictures'])->whereBetween('price', [$bottom, $top])->get());
+            return response()->json([
+                'products' => $products
+            ], 200);
+        } else {
+            switch ($request['price']) {
+                case 1:
+                    $bottom = 0;
+                    $top = 25;
+                    break;
+                case 2:
+                    $bottom = 25;
+                    $top = 50;
+                    break;
+                case 3:
+                    $bottom = 50;
+                    $top = 250;
+                    break;
+                case 4:
+                    $bottom = 250;
+                    $top = 600;
+                    break;
+                case 5:
+                    $bottom = 600;
+                    $top = 1000;
+                    break;
+            }
+            $products = new ProductSPCollection(Product::with(["sizes" => function ($query) use ($request) {
+                $query->where('size_id', '=', $request['size'] - 41)->where('quantity', '!=', 0);
+            }, 'pictures'])->whereBetween('price', [$bottom, $top])->get());
+            return response()->json([
+                'products' => $products
+            ], 200);
+        }
+    }
 }
