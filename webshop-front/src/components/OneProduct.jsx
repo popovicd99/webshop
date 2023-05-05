@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
+import ReactPaginate from "react-paginate";
 
 const ProductBlock = styled.div`
   padding: 1rem;
@@ -46,68 +48,105 @@ const ProductPictures = styled.img`
   width: 25px;
   margin-right: 5px;
 `;
-const OneProduct = ({ product }) => {
+const OneProduct = ({ products }) => {
+  const [currentItems, setcurrentItems] = useState([]);
+  const [pageCount, setpageCount] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    const endOffset = itemOffset + itemsPerPage;
+    setcurrentItems(products.slice(itemOffset, endOffset));
+    setpageCount(Math.ceil(products.length / itemsPerPage));
+  }, [itemOffset, itemsPerPage, products]);
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % products.length;
+    setItemOffset(newOffset);
+  };
+
   return (
     <>
-      <ProductBlock className="column column-block">
-        <ProductContainer>
-          <ProductThumbnail>
-            <Link to={"/product/" + product.name}>
-              <img
-                src={
-                  product.pictures[0] != null
-                    ? "/products/" + product.pictures[0].file_path
-                    : "https://placehold.it/30x30"
-                }
-              />
-            </Link>
-          </ProductThumbnail>
-          <ProductTitle>
-            <Link to={"/product/" + product.name}>{product.name}</Link>
-          </ProductTitle>
-          <ProductDesc>{product.desc}</ProductDesc>
-          <ProductPrice>${product.price}</ProductPrice>
-          <ProductPicturesContainer>
-            <Link to={"/product/" + product.name}>
-              <ProductPictures
-                src={
-                  product.pictures[1] != null
-                    ? "/products/" + product.pictures[1].file_path
-                    : "https://placehold.it/30x30"
-                }
-              />
-            </Link>
+      <div className="row small-up-2 medium-up-3 large-up-4">
+        {currentItems.map((product) => {
+          return (
+            <>
+              <ProductBlock className="column column-block" key={product.id}>
+                <ProductContainer>
+                  <ProductThumbnail>
+                    <Link to={"/product/" + product.name}>
+                      <img
+                        src={
+                          product.pictures[0] != null
+                            ? "/products/" + product.pictures[0].file_path
+                            : "https://placehold.it/30x30"
+                        }
+                      />
+                    </Link>
+                  </ProductThumbnail>
+                  <ProductTitle>
+                    <Link to={"/product/" + product.name}>{product.name}</Link>
+                  </ProductTitle>
+                  <ProductDesc>{product.desc}</ProductDesc>
+                  <ProductPrice>${product.price}</ProductPrice>
+                  <ProductPicturesContainer>
+                    <Link to={"/product/" + product.name}>
+                      <ProductPictures
+                        src={
+                          product.pictures[1] != null
+                            ? "/products/" + product.pictures[1].file_path
+                            : "https://placehold.it/30x30"
+                        }
+                      />
+                    </Link>
 
-            <Link to={"/product/" + product.name}>
-              <ProductPictures
-                src={
-                  product.pictures[2] != null
-                    ? "/products/" + product.pictures[2].file_path
-                    : "https://placehold.it/30x30"
-                }
-              />
-            </Link>
-            <Link to={"/product/" + product.name}>
-              <ProductPictures
-                src={
-                  product.pictures[3] != null
-                    ? "/products/" + product.pictures[3].file_path
-                    : "https://placehold.it/30x30"
-                }
-              />
-            </Link>
-            <Link to={"/product/" + product.name}>
-              <ProductPictures
-                src={
-                  product.pictures[4] != null
-                    ? "/products/" + product.pictures[4].file_path
-                    : "https://placehold.it/30x30"
-                }
-              />
-            </Link>
-          </ProductPicturesContainer>
-        </ProductContainer>
-      </ProductBlock>
+                    <Link to={"/product/" + product.name}>
+                      <ProductPictures
+                        src={
+                          product.pictures[2] != null
+                            ? "/products/" + product.pictures[2].file_path
+                            : "https://placehold.it/30x30"
+                        }
+                      />
+                    </Link>
+                    <Link to={"/product/" + product.name}>
+                      <ProductPictures
+                        src={
+                          product.pictures[3] != null
+                            ? "/products/" + product.pictures[3].file_path
+                            : "https://placehold.it/30x30"
+                        }
+                      />
+                    </Link>
+                    <Link to={"/product/" + product.name}>
+                      <ProductPictures
+                        src={
+                          product.pictures[4] != null
+                            ? "/products/" + product.pictures[4].file_path
+                            : "https://placehold.it/30x30"
+                        }
+                      />
+                    </Link>
+                  </ProductPicturesContainer>
+                </ProductContainer>
+              </ProductBlock>
+            </>
+          );
+        })}
+      </div>
+      <div className="row expanded">
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          containerClassName="pagination text-center"
+          activeClassName="current"
+        />
+      </div>
     </>
   );
 };

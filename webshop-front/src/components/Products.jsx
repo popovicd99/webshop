@@ -34,8 +34,8 @@ const Label = styled.label`
 
 const Products = ({ children }) => {
   const [products, setProducts] = useState(null);
-  const [fltrSize, setfltrSize] = useState(null);
-  const [fltrPrice, setfltrPrice] = useState(null);
+  const [fltrSize, setfltrSize] = useState(0);
+  const [fltrPrice, setfltrPrice] = useState(0);
   useEffect(() => {
     if (products == null) {
       axios
@@ -48,14 +48,17 @@ const Products = ({ children }) => {
         });
     }
   }, []);
+
   useEffect(() => {
     var string;
-    if (fltrSize != null || fltrPrice != null) {
+    if (fltrSize != 0 || fltrPrice != 0) {
       string = "?size=" + fltrSize + "&price=" + fltrPrice;
       axios
         .get("api/filter" + string)
         .then((res) => {
-          setProducts(res.data.products);
+          var temp = res.data.products;
+          temp = temp.filter((item) => !(item["sizes"] == 0));
+          setProducts(temp);
         })
         .catch((ex) => {
           console.log(ex);
@@ -344,19 +347,7 @@ const Products = ({ children }) => {
           </Filters>
         </WrapLeft>
         <WrapRight className="columns medium-9 large-10">
-          <div className="row small-up-2 medium-up-3 large-up-4">
-            {products == null ? (
-              <></>
-            ) : (
-              products.map((product) => {
-                return product["sizes"].length == 0 ? (
-                  <></>
-                ) : (
-                  <OneProduct product={product} key={product.id} />
-                );
-              })
-            )}
-          </div>
+          {products == null ? <></> : <OneProduct products={products} />}
         </WrapRight>
       </Wrap>
       {children}
