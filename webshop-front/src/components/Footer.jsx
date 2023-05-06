@@ -108,16 +108,16 @@ const Footer = () => {
                 </Menu>
               </Container>
               <Container className="small-4 medium-4 large-4 columns">
-                <MenuName>Help</MenuName>
+                <MenuName>My Account</MenuName>
                 <Menu className="menu vertical">
                   <MenuItem>
-                    <MenuText>FAQs</MenuText>
+                    <MenuText>Sign in</MenuText>
                   </MenuItem>
                   <MenuItem>
-                    <MenuText href="#">Return Policy</MenuText>
+                    <MenuText href="#">Order status</MenuText>
                   </MenuItem>
                   <MenuItem>
-                    <MenuText href="#">Shipping &amp; Delivery</MenuText>
+                    <MenuText href="#">My Wishlist</MenuText>
                   </MenuItem>
                 </Menu>
               </Container>
@@ -181,7 +181,7 @@ const Footer = () => {
           </FooterBottomLeft>
           <FooterBottomRight className="small-12 medium-5 columns">
             <Copyright>
-              <span>©2017 Company Name. All rights reserved.</span>
+              <span>©2023 Danilo Popovic. All rights reserved.</span>
             </Copyright>
           </FooterBottomRight>
         </FooterBottom>

@@ -73,11 +73,10 @@ const Hero = ({ children }) => {
     <Container>
       <HeroWrap>
         <HeroContent>
-          <Title>Promo Headline Will Display Here</Title>
+          <Title>SNKR</Title>
           <Description className="hide-for-small-only">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tortor
-            ante, varius eget lacinia porta, faucibus ut eros. Donec quis dui id
-            felis pharetra fermentum.
+            Najveći izbor limitiranih kolekcija patika najpoznatijih svetskih
+            brendova.
           </Description>
           <Container>
             <Link to="/shop">
