@@ -32,9 +32,11 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::resource('products', ProductController::class)->only([
         'store', 'update', 'destroy'
     ]);
+    Route::post('/product', [ProductController::class, 'updateSizes']);
 });
 Route::resource('products', ProductController::class)->only([
     'index', 'show'
 ]);
 Route::get('/product/{name}', [ProductController::class, 'getbyName']);
-Route::post('/product', [ProductController::class, 'updateSizes']);
+Route::get('/search/{name}', [ProductController::class, 'search']);
+Route::get('/filter', [ProductController::class, 'filter']);
