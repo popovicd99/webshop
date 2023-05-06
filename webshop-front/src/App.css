@@ -187,6 +187,11 @@
   height: 650px;
   width: 40%;
 }
+@media screen and (max-width: 750px) {
+  .popup-content {
+    width: 350px;
+  }
+}
 .close {
   cursor: pointer;
   align-self: flex-end;
@@ -254,4 +259,7 @@
 .mobile-app-message-bar .message-input input[type="text"] {
   border-radius: 0.625rem;
   margin: 0;
+}
+.pagination li {
+  display: inline-block;
 }
