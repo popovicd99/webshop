@@ -73,12 +73,15 @@ const Admin = ({ children, token }) => {
       Authorization: "Bearer " + token,
     },
   };
+
   const [productData, setProductData] = useState({
     name: "",
     desc: "",
     price: "",
   });
+
   const [products, setProducts] = useState(null);
+
   useEffect(() => {
     if (products == null) {
       axios
@@ -101,8 +104,6 @@ const Admin = ({ children, token }) => {
   function handleImages(e) {
     let data = productData;
     data["pictures"] = e.target.files;
-    setProductData(data);
-    console.log(productData);
   }
 
   function handleAddProduct(e) {
@@ -124,7 +125,6 @@ const Admin = ({ children, token }) => {
           .catch((ex) => {
             console.log(ex);
           });
-        console.log(res);
       })
       .catch((ex) => {
         console.log(ex);
@@ -144,6 +144,7 @@ const Admin = ({ children, token }) => {
     data[e.target.name] = e.target.value;
     setSizes(data);
   }
+
   function loadSizes(e, id) {
     e.preventDefault();
     for (let index = 42; index < 48; index++) {
@@ -160,6 +161,7 @@ const Admin = ({ children, token }) => {
       document.getElementById("popupedit").style.display = "block";
     });
   }
+
   function handleEditSizes(e) {
     e.preventDefault();
     let config = {
@@ -379,16 +381,11 @@ const Admin = ({ children, token }) => {
               {products == null ? (
                 <></>
               ) : (
-                products.map((product) => {
-                  return (
-                    <OneTableProduct
-                      product={product}
-                      key={product.id}
-                      loadSizes={loadSizes}
-                      remove={remove}
-                    />
-                  );
-                })
+                <OneTableProduct
+                  products={products}
+                  loadSizes={loadSizes}
+                  remove={remove}
+                />
               )}
             </TableBody>
           </Table>
